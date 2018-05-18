@@ -66,6 +66,8 @@ class Command(BaseCommand):
                                                                                                             num_ignored
                                                                                                             )))
 
+        self.disable_unlisted_stations(station_status_merged.keys())
+
     def update_average(self, station, num_bikes_available, capacity, time, day):
         # check if the historical object exists
         # if not then the count is 1 and average is current value
@@ -98,3 +100,7 @@ class Command(BaseCommand):
         #                                                                  station_average.time_data[time]['count'],
         #                                                                  station_average.time_data[time]['mean'],
         #                                                                  station_average.station.name))
+
+    def disable_unlisted_stations(self, station_ids):
+        num_unlisted = Station.objects.exclude(id__in=station_ids).update(enabled=False)
+        self.stdout.write('{} stations newly unlisted.'.format(num_unlisted))

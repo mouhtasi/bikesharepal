@@ -4,3 +4,4 @@ __pycache__/
 bikesharepal/static/
 bikesharepal/.env
 bikesharepal/media/
+updatestationsdb.log

@@ -44,7 +44,7 @@ def serialize_availability_json(qs):
 
 def catalog_home(request):
     # we'll send the stations to build a table in case JS isn't enabled to show a map
-    stations = Station.objects.all().order_by('name')
+    stations = Station.objects.filter(enabled=True).order_by('name')
     geojson = serialize_geojson(stations)  # for the map
     return render(request, 'bikesharestationcatalog/catalog.html', {'geojson': geojson, 'stations': stations})
 
