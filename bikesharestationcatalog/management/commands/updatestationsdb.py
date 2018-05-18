@@ -51,7 +51,8 @@ class Command(BaseCommand):
                                                                         'num_bikes_available': station[
                                                                             'num_bikes_available'],
                                                                         'num_docks_available': station[
-                                                                            'num_docks_available']})
+                                                                            'num_docks_available'],
+                                                                        'enabled': True})
                 if created:
                     num_created += 1
                 else:
@@ -102,5 +103,5 @@ class Command(BaseCommand):
         #                                                                  station_average.station.name))
 
     def disable_unlisted_stations(self, station_ids):
-        num_unlisted = Station.objects.exclude(id__in=station_ids).update(enabled=False)
-        self.stdout.write('{} stations newly unlisted.'.format(num_unlisted))
+        num_unlisted = Station.objects.exclude(id__in=station_ids, enabled=True).update(enabled=False)
+        self.stdout.write('{} unlisted station(s).'.format(num_unlisted))
