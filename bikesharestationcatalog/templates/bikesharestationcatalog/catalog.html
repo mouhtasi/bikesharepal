@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}<link rel="stylesheet" type="text/css" href="{% static 'css/catalog.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/mapbox-gl.css' %}" />
+<script src="{% static 'js/mapbox-gl.js' %}"></script>
+<script>
+    (function () {
+        window.geojson = {{ geojson|safe }};
+        window.station_detail_url = '{% url 'station_details' 0 %}';
+    }());
+</script>
+<script src="{% static 'js/catalog.js'%} "></script>
+{% endblock %}
+
+{% block title %}{% block page_title %}Bikeshare Toronto Station Catalog{% endblock %}{% endblock %}
+{% block subtitle %}{% endblock %}
+
+{% block content %}
+<div id="map"></div>
+<table id="station-list">
+{# This table will be hidden if JS is enabled #}
+    {% if stations %}
+        <tr><th>Name</th><th>Available Bikes</th><th>Available Docks</th></tr>
+        {% for station in stations %}
+            <tr><td><a href="{% url 'station_details' station.id %}">{{ station.name }}</a></td><td>{{ station.num_bikes_available }}</td><td>{{ station.num_docks_available }}</td></tr>
+        {% endfor %}
+    {% endif %}
+</table>
+<div>
+    <p>Use the map and click on a bikeshare station to view bike and dock availability. Click to the station details page
+     in the popup for more information on that specific station.</p>
+</div>
+{% endblock %}

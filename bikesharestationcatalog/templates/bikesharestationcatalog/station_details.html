@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/grids-min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/grids-responsive-min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/station_details.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/mapbox-gl.css' %}" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+<script src="{% static 'js/mapbox-gl.js' %}"></script>
+<script src="{% static 'js/moment.min.js' %}"></script>
+<script src="{% static 'js/Chart.min.js' %}"></script>
+<script>
+    (function () {
+        window.geojson = {{ geojson|safe }};
+        window.station_averages_json = {{ station_averages|safe }};
+        window.station_capacity = {{ station.capacity }};
+    }());
+</script>
+<script src="{% static 'js/station_details.js'%} "></script>
+{% endblock %}
+
+{% block title %}{% block page_title %}{{ station.name }} {% endblock %}{% endblock %}
+
+{% block content %}
+<div class="pure-g row">
+    {% if message %}
+        <div class="pure-u-1 message"><i class="fas fa-check-circle"></i> {{ message }}</div>
+    {% endif %}
+</div>
+
+<div class="pure-g row">
+    <div class="pure-u-1 pure-u-md-1-3 pure-u-lg-1-3 pure-xl-1-3 station_availability_item"><h3>Available Bikes: {{ station.num_bikes_available }}</h3></div>
+    <div class="pure-u-1 pure-u-md-1-3 pure-u-lg-1-3 pure-xl-1-3 station_availability_item"><h3>Available Docks: {{ station.num_docks_available }}</h3></div>
+    <div class="pure-u-1 pure-u-md-1-3 pure-u-lg-1-3 pure-xl-1-3 station_availability_item"><h3>Capacity: {{ station.capacity }}</h3></div>
+</div>
+
+<div class="pure-g row">
+    {% if images %}
+        <div class="pure-u-1 pure-u-lg-2-3 pure-u-xl-2-3 slideshow-container">
+        <div id="non-js-image"><img class="station_img" src="{{ images.0.image.url }}"></div>
+        {% for image in images %}
+            <div class="mySlides fade">
+                <img class="station_img" src="{{ image.image.url }}">
+            </div>
+        {% endfor %}
+        <!-- Next and previous buttons -->
+        <a id="prev">&#10094;</a>
+        <a id="next">&#10095;</a>
+        </div>
+    {% endif %}
+    <div class="pure-u-1 {% if images %}pure-u-lg-1-3 pure-u-xl-1-3{% endif %} mapcontainer">
+        <div id="map"></div>
+        <div class="upload">
+            <form id="img_upload_form" action="{% url 'station_details' station.id%}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label class="custom-file-upload">
+                <i class="fas fa-upload"></i> Upload Station Photo
+                {{ form.imgfile }}
+            </label>
+        </form>
+        </div>
+    </div>
+</div>
+
+<div class="pure-g row">
+    <div class="pure-u-1">
+        <h3 class="chartTitle">Average Bike Availability</h3>
+    </div>
+</div>
+
+<div class="pure-g">
+    <div class="pure-u-1-24" id="previousDayArrow">
+        &lsaquo;
+    </div>
+    <div class="pure-u-22-24 chart-container">
+        <canvas id="myChart"></canvas>
+    </div>
+    <div class="pure-u-1-24" id="nextDayArrow">
+        &rsaquo;
+    </div>
+</div>
+
+<div class="pure-g row">
+    <div class="pure-u-1">
+
+    </div>
+</div>
+{% endblock %}

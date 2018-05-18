@@ -1,0 +1,6 @@
+.idea/
+__pycache__/
+*.py[cod]
+bikesharepal/static/
+bikesharepal/.env
+bikesharepal/media/
