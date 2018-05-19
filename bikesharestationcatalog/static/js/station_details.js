@@ -2,34 +2,36 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiaW1hZG0iLCJhIjoiY2plbnJsMDJyMjU0MTMzcGhxcjZla
 // TODO: Add mapbox access token to env (include in template and load in this js)
 
 window.onload = function () {
-    map = new mapboxgl.Map({
-        container: 'map',
-        center: window.geojson['features'][0]['geometry']['coordinates'],
-        zoom: 17,
-        style: 'mapbox://styles/mapbox/satellite-v9'
-    });
-
-    map.on('load', function () {
-        var nav = new mapboxgl.NavigationControl();
-        map.addControl(nav, 'bottom-right');
-
-        map.addLayer(
-            {
-                "id": "stations",
-                "type": "symbol",
-                'source': {
-                    'type': 'geojson',
-                    'data': window.geojson
-                },
-                "layout": {
-                    "icon-image": "bicycle-share-15",
-                    "icon-allow-overlap": true
-                }
-            }
-        );
+    if (detectWebGL()) {
+        map = new mapboxgl.Map({
+            container: 'map',
+            center: window.geojson['features'][0]['geometry']['coordinates'],
+            zoom: 17,
+            style: 'mapbox://styles/mapbox/satellite-v9'
+        });
 
         map['dragPan'].disable();
-    });
+
+        map.on('load', function () {
+            var nav = new mapboxgl.NavigationControl();
+            map.addControl(nav, 'bottom-right');
+
+            map.addLayer(
+                {
+                    "id": "stations",
+                    "type": "symbol",
+                    'source': {
+                        'type': 'geojson',
+                        'data': window.geojson
+                    },
+                    "layout": {
+                        "icon-image": "bicycle-share-15",
+                        "icon-allow-overlap": true
+                    }
+                }
+            );
+        });
+    }
 
     // By default the page will show the first image in case JS isn't enabled
     // We'll just hide that image when JS is enabled so the slideshow can work as expected
@@ -199,3 +201,29 @@ window.onload = function () {
         document.getElementById("img_upload_form").submit();
     };
 };
+
+function detectWebGL() {
+    // Check for the WebGL rendering context
+    if (!!window.WebGLRenderingContext) {
+        var canvas = document.createElement("canvas"),
+            names = ["webgl", "experimental-webgl", "moz-webgl", "webkit-3d"],
+            context = false;
+
+        for (var i in names) {
+            try {
+                context = canvas.getContext(names[i]);
+                if (context && typeof context.getParameter === "function") {
+                    // WebGL is enabled.
+                    return 1;
+                }
+            } catch (e) {
+            }
+        }
+
+        // WebGL is supported, but disabled.
+        return 0;
+    }
+
+    // WebGL not supported.
+    return -1;
+}
