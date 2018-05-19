@@ -13,10 +13,14 @@
 <script src="{% static 'js/catalog.js'%} "></script>
 {% endblock %}
 
-{% block title %}{% block page_title %}Bikeshare Toronto Station Catalog{% endblock %}{% endblock %}
+{% block title %}{% block page_title %}Bike Share Toronto Stations{% endblock %}{% endblock %}
 {% block subtitle %}{% endblock %}
 
 {% block content %}
+<div class="copy">
+    <p>Use the map to select a bike share station to view current bike and dock availability.</p>
+    <p>Click <em>details</em> to view photos of the station, and average future bike availability.</p>
+</div>
 <div id="map"></div>
 <table id="station-list">
 {# This table will be hidden if JS is enabled #}
@@ -27,8 +31,4 @@
         {% endfor %}
     {% endif %}
 </table>
-<div>
-    <p>Use the map and click on a bikeshare station to view bike and dock availability. Click to the station details page
-     in the popup for more information on that specific station.</p>
-</div>
 {% endblock %}

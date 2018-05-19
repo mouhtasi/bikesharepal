@@ -14,7 +14,7 @@ window.onload = function () {
 
     map.on('load', function () {
         var nav = new mapboxgl.NavigationControl();
-        map.addControl(nav, 'top-left');
+        map.addControl(nav, 'top-right');
 
         map.addControl(new mapboxgl.GeolocateControl({
             positionOptions: {

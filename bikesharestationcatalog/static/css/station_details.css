@@ -9,7 +9,7 @@
     width: 100%;
     height: 90%;
     min-height: 400px;
-    margin: auto 2px auto 5px;
+    margin: auto 0;
 }
 
 .mapcontainer {
@@ -32,13 +32,11 @@ input[type="file"] {
 }
 
 .custom-file-upload {
-    border: 1px solid #ccc;
     display: inline-block;
     text-align: center;
     cursor: pointer;
     width: 100%;
     margin-top: 5px;
-    margin-left: 5px;
     padding: 5px 0 5px 0;
     background-color: #1da1f2;
     color: whitesmoke;
@@ -68,7 +66,7 @@ input[type="file"] {
     position: relative;
     min-height: 400px;
     background-color: #f2f2f2;
-    margin-bottom: 2px;
+    margin-bottom: 5px;
 }
 
 /* Hide the images by default */

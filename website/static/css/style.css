@@ -1,0 +1,214 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300');
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    background-color: whitesmoke;
+    color: #333
+}
+
+.pure-g [class*="pure-u"] {
+    font-family: 'Open Sans', sans-serif !important;
+}
+
+.header {
+    color: #333;
+    text-align: center;
+    max-width: 1600px;
+    margin: 0 auto 0 auto;
+    font-size: 18px;
+}
+
+/* menu stuff ===================================== */
+/*Strip the ul of padding and list styling*/
+ul {
+    list-style-type:none;
+    margin:0;
+    position: absolute;
+}
+/*Create a horizontal list with spacing*/
+li {
+    display:inline-block;
+    float: left;
+    margin-right: 1px;
+}
+/*Style for menu links*/
+li a {
+    display:block;
+    min-width:140px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    text-decoration: none;
+    color: #333;
+}
+/*Hover state for top level links*/
+li:hover a {
+    background: #19c589;
+}
+/*Style for dropdown links*/
+li:hover ul a {
+    background: #f3f3f3;
+    color: #2f3036;
+    height: 40px;
+    line-height: 40px;
+}
+/*Hover state for dropdown links*/
+li:hover ul a:hover {
+    background: #19c589;
+    color: #fff;
+}
+/*Hide dropdown links until they are needed*/
+li ul {
+    display: none;
+}
+/*Make dropdown links vertical*/
+li ul li {
+    display: block;
+    float: none;
+}
+/*Prevent text wrapping*/
+li ul li a {
+    width: auto;
+    min-width: 100px;
+    padding: 0 20px;
+}
+/*Display the dropdown on hover*/
+ul li a:hover + .hidden, .hidden:hover {
+    display: block;
+}
+/*Style 'show menu' label button and hide it by default*/
+.show-menu {
+    text-decoration: none;
+    color: #fff;
+    background: #19c589;
+    text-align: center;
+    padding: 10px 0;
+    display: none;
+}
+/*Hide checkbox*/
+input[type=checkbox]{
+    display: none;
+}
+/*Show menu when invisible checkbox is checked*/
+input[type=checkbox]:checked ~ #menu{
+    display: block;
+}
+
+/*==================================================*/
+
+#menu {
+    width: 100%;
+    max-width: 1600px;
+    padding: 0;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.10);
+}
+
+#menu-container {
+    width: 100%;
+}
+
+.menu-selected {
+    background-color: #cccccc;
+}
+
+.menu-contents {
+    padding: 0.5em 4em 0.5em 0;
+    text-align: center;
+    margin: 0 auto 0 auto;
+    max-width: 1600px;
+}
+
+.title > h1 {
+    font-size: 28px;
+    padding-top: 28px;
+}
+
+.content {
+    margin: 0 auto;
+    max-width: 1600px;
+}
+
+.copy {
+    width: 95%;
+    margin: 0 auto;
+}
+
+/*
+ * -- TABLET (AND UP) MEDIA QUERIES --
+ * On tablets and other medium-sized devices, we want to customize some
+ * of the mobile styles.
+ */
+@media (min-width: 48em) {
+
+    /* We increase the body font size */
+    body {
+        font-size: 18px;
+    }
+
+    /* We can align the menu header to the left, but float the
+    menu items to the right. */
+    .menu-contents {
+        text-align: left;
+    }
+
+    .menu-contents ul {
+        position: absolute;
+        /*right: 0;*/
+    }
+
+    /* We decrease the width of the .splash, since we have more width
+    to work with */
+    .splash {
+        height: 50%;
+    }
+
+    .splash-head {
+        font-size: 250%;
+    }
+
+}
+
+@media screen and (max-width: 767px) {
+    .content {
+        padding: 0;
+    }
+
+    .header {
+        padding: 0;
+    }
+
+    .title > h1{
+        padding-top: 0;
+    }
+
+    /*Make dropdown links appear inline*/
+    ul {
+        position: static;
+        display: none;
+    }
+    /*Create vertical spacing*/
+    li {
+        margin-bottom: 1px;
+    }
+    /*Make all menu links full width*/
+    ul li, li a {
+        width: 100%;
+    }
+    /*Display 'show menu' link*/
+    .show-menu {
+        display:block;
+    }
+}
+
+/*
+ * -- DESKTOP (AND UP) MEDIA QUERIES --
+ * On desktops and other large devices, we want to over-ride some
+ * of the mobile and tablet styles.
+ */
+@media (min-width: 78em) {
+    /* We increase the header font size even more */
+    .splash-head {
+        font-size: 500%;
+    }
+}
