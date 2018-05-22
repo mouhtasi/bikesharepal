@@ -23,20 +23,89 @@ window.onload = function () {
                 trackUserLocation: true
             }));
 
+            var geojson = window.geojson;
+
             map.addLayer(
                 {
                     "id": "stations",
                     "type": "symbol",
                     'source': {
                         'type': 'geojson',
-                        'data': window.geojson
+                        'data': geojson
                     },
                     "layout": {
                         "icon-image": "bicycle-share-15",
                         "icon-allow-overlap": true
-                    }
+                    },
+                    // "maxzoom": 14
                 }
             );
+
+            map.addLayer(
+                {
+                    "id": "stations-markers",
+                    "type": "symbol",
+                    'source': {
+                        'type': 'geojson',
+                        'data': geojson
+                    },
+                    "layout": {
+                        "icon-image": 'station-marker',
+                        "icon-allow-overlap": true,
+                        "icon-size": 0.01
+                    },
+                    "minzoom": 14,
+                }
+            );
+
+            geojson.features.forEach(function (marker) {
+                var el = document.createElement('div');
+                el.className = 'station-marker';
+                el.style.display = 'none';
+
+                var bikes = marker.properties.num_bikes_available;
+                var docks = marker.properties.num_docks_available;
+
+                var image = '';
+                var bike_ratio = bikes/(bikes+docks);
+                if (bikes === 1 && docks > 0) {
+                    image = '1bike';
+                } else if (docks === 1 && bikes > 0) {
+                    image = '1dock';
+                } else if (bikes === 0 && docks > 0) {
+                    image = '0';
+                } else if (docks === 0 && bikes > 0) {
+                    image = '100';
+                } else if (bike_ratio < 1 && bike_ratio >= .625) {
+                    image = '75';
+                } else if (bike_ratio < .625 && bike_ratio > .375) {
+                    image = '50';
+                } else if (bike_ratio <= .375 && bike_ratio > 0) {
+                    image = '25';
+                }
+
+                el.style.backgroundImage = "url(" + window.origin + "/static/image/marker" + image + ".svg)";
+
+
+                new mapboxgl.Marker(el)
+                    .setLngLat(marker.geometry.coordinates)
+                    .setOffset([0, -25])
+                    .addTo(map);
+            });
+
+            map.on('zoom', function () {
+                if (map.getZoom() >= 14) {
+                    var elements = document.getElementsByClassName('station-marker');
+                    for(var i = 0; i < elements.length; i++) {
+                        elements.item(i).style.display = '';
+                    }
+                } else {
+                    var elements = document.getElementsByClassName('station-marker');
+                    for(var i = 0; i < elements.length; i++) {
+                        elements.item(i).style.display = 'none';
+                    }
+                }
+            });
 
             // When a click event occurs on a feature in the places layer, open a popup at the
             // location of the feature, with description HTML from its properties.

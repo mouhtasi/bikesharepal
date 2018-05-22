@@ -19,6 +19,13 @@ tr:nth-child(even) {
 
 @media screen and (max-width: 767px) {
     #map {
-        height: 90vh;
+        height: 85vh;
     }
+}
+
+.station-marker {
+    background-size: cover;
+    width: 30px;
+    height: 40px;
+    cursor: pointer;
 }
