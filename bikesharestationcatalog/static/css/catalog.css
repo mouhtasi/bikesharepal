@@ -32,3 +32,8 @@ tr:nth-child(even) {
     font-family: 'Open Sans', sans-serif;
     font-size: 16px;
 }
+
+.pure-button {
+    width: 100%;
+    margin-top: 5px;
+}
