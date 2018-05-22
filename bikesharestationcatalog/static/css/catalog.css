@@ -28,4 +28,7 @@ tr:nth-child(even) {
     width: 30px;
     height: 40px;
     cursor: pointer;
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
 }

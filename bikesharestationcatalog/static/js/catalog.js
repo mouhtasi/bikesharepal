@@ -49,14 +49,15 @@ window.onload = function () {
                         'type': 'geojson',
                         'data': geojson
                     },
-                    "layout": {
-                        "icon-image": 'station-marker',
-                        "icon-allow-overlap": true,
-                        "icon-size": 0.01
-                    },
-                    "minzoom": 14,
+                    "minzoom": 14
                 }
             );
+
+            // When a click event occurs on a feature in the places layer, open a popup at the
+            // location of the feature, with description HTML from its properties.
+            function makePopup(e) {
+
+            }
 
             geojson.features.forEach(function (marker) {
                 var el = document.createElement('div');
@@ -67,7 +68,7 @@ window.onload = function () {
                 var docks = marker.properties.num_docks_available;
 
                 var image = '';
-                var bike_ratio = bikes/(bikes+docks);
+                var bike_ratio = bikes / (bikes + docks);
                 if (bikes === 1 && docks > 0) {
                     image = '1bike';
                 } else if (docks === 1 && bikes > 0) {
@@ -85,30 +86,38 @@ window.onload = function () {
                 }
 
                 el.style.backgroundImage = "url(" + window.origin + "/static/image/marker" + image + ".svg)";
+                el.textContent = marker.properties.num_bikes_available;
 
+
+                var description = marker.properties.name;
+                description += '<br>Available Bikes: ' + marker.properties.num_bikes_available;
+                description += '<br>Available Docks: ' + marker.properties.num_docks_available;
+                description += '<br><a href="' +
+                    (window.origin + window.station_detail_url).replace('0', marker.properties.id) + '">Details</a>';
+
+                var popup = new mapboxgl.Popup().setHTML(description);
 
                 new mapboxgl.Marker(el)
                     .setLngLat(marker.geometry.coordinates)
                     .setOffset([0, -25])
+                    .setPopup(popup)
                     .addTo(map);
             });
 
             map.on('zoom', function () {
                 if (map.getZoom() >= 14) {
                     var elements = document.getElementsByClassName('station-marker');
-                    for(var i = 0; i < elements.length; i++) {
+                    for (var i = 0; i < elements.length; i++) {
                         elements.item(i).style.display = '';
                     }
                 } else {
                     var elements = document.getElementsByClassName('station-marker');
-                    for(var i = 0; i < elements.length; i++) {
+                    for (var i = 0; i < elements.length; i++) {
                         elements.item(i).style.display = 'none';
                     }
                 }
             });
 
-            // When a click event occurs on a feature in the places layer, open a popup at the
-            // location of the feature, with description HTML from its properties.
             map.on('click', 'stations', function (e) {
                 var station_details = e.features[0];
                 var coordinates = station_details.geometry.coordinates.slice();
@@ -117,13 +126,6 @@ window.onload = function () {
                 description += '<br>Available Docks: ' + station_details.properties.num_docks_available;
                 description += '<br><a href="' +
                     (window.origin + window.station_detail_url).replace('0', station_details.properties.id) + '">Details</a>';
-
-                // Ensure that if the map is zoomed out such that multiple
-                // copies of the feature are visible, the popup appears
-                // over the copy being pointed to.
-                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                }
 
                 new mapboxgl.Popup()
                     .setLngLat(coordinates)
