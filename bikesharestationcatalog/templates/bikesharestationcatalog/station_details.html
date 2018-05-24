@@ -48,14 +48,18 @@
     {% endif %}
     <div class="pure-u-1 {% if images %}pure-u-lg-1-3 pure-u-xl-1-3{% endif %} mapcontainer">
         <div id="map"></div>
-        <div class="upload">
+        <div class="pure-u-1 pure-u-lg-2-3 pure-u-xl-2-3">
             <form id="img_upload_form" action="{% url 'station_details' station.id%}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <label class="custom-file-upload">
-                <i class="fas fa-upload"></i> Upload Station Photo
-                {{ form.imgfile }}
-            </label>
-        </form>
+                {% csrf_token %}
+                <label class="custom-file-upload">
+                    <i class="fas fa-upload"></i> Upload Station Photo
+                    {{ form.imgfile }}
+                </label>
+            </form>
+        </div>
+
+        <div class="image-i pure-u-1 pure-u-lg-1-3 pure-u-xl-1-3">
+            <a href="{% url 'about'%}#photo-policy"><i class="fas fa-info-circle"></i> Upload Policy</a>
         </div>
     </div>
 </div>

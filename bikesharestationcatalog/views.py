@@ -73,4 +73,5 @@ def station_details(request, s_id):
 
 
 def about(request):
-    return render(request, 'bikesharestationcatalog/about.html');
+    num_stations = Station.objects.filter(enabled=True).count();
+    return render(request, 'bikesharestationcatalog/about.html', {'num_stations': num_stations});

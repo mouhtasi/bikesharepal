@@ -10,11 +10,11 @@
 {% block content %}
 
 <div class="pure-g">
-    <div class="pure-u-1">
+    <div class="pure-u-1 copy">
         <dl>
-            <dt>What does this site do?</dt>
-            <dd>Bike Share Pal provides an interface for checking bike share station locations and their relevant bike
-                and dock availability, along more detailed information such as average availability over time and
+            <dt>What is this site?</dt>
+            <dd>Bike Share Pal provides a simple interface for checking bike share station locations and their relevant bike
+                and dock availability, alongside more detailed information such as average availability over time and
                 photos of the stations.
             </dd>
 
@@ -31,14 +31,21 @@
                 minutes old.
             </dd>
 
-            <dt>What is the policy for photos uploaded to this site?</dt>
-            <dd>Photos posted on this site are uploaded by the owner and are licensed under public domain. By uploading
-                photos to this site you assert that you are the owner of the photo and are posting it with the knowledge
+            <dt>Why do you need us to upload photos?</dt>
+            <dd>There are currently {{ num_stations }} active stations in Toronto, so while we do try to have up-to-date photos ourselves,
+            we need the help of the community to keep the photos useful and current. These photos make it easier to
+            know where the stations are before-hand, making it easier to find them in an unfamiliar location.</dd>
+
+            <dt id="photo-policy">What is the policy for photos uploaded to this site?</dt>
+            <dd>Photos posted on this site are uploaded by the owner of the photo and are licensed under the public domain.
+                <br>By uploading photos to this site you assert that you are the owner of the photo and are posting it with the knowledge
                 that it is going into public domain. Meaning, please only upload photos you've taken yourself, and know
                 that these photos will be open for anyone to use in any way without attribution, in perpetuity.
+                <br>Uploaded photos are subject to approval before being displayed on the site. Uploaded photos may be
+                edited prior to being approved and displayed.
             </dd>
 
-            <dt>Who can I get in contact with in case of issues or questions?</dt>
+            <dt id="contact">Who can I get in contact with in case of questions or issues?</dt>
             <dd>Please email us at bikesharepal (-at-) fastmail.com.</dd>
         </dl>
     </div>
