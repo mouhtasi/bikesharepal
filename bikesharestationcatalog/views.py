@@ -70,3 +70,7 @@ def station_details(request, s_id):
                                                                             'form': form, 'images': images,
                                                                             'station_averages': station_averages,
                                                                             'message': message})
+
+
+def about(request):
+    return render(request, 'bikesharestationcatalog/about.html');

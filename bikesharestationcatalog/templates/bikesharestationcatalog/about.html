@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/about.css' %}"/>
+{% endblock %}
+
+{% block title %}{% block page_title %}About{% endblock %}{% endblock %}
+
+{% block content %}
+
+<div class="pure-g">
+    <div class="pure-u-1">
+        <dl>
+            <dt>What does this site do?</dt>
+            <dd>Bike Share Pal provides an interface for checking bike share station locations and their relevant bike
+                and dock availability, along more detailed information such as average availability over time and
+                photos of the stations.
+            </dd>
+
+            <dt>Where do you get the data from?</dt>
+            <dd>The bike share data used on this site is gathered from <a
+                    href="https://www.toronto.ca/city-government/data-research-maps/open-data/open-data-catalogue/#84045f23-7465-0892-8889-7b6f91049b29">Bike
+                Share Toronto's open data API</a> under the <a
+                    href="https://www.toronto.ca/city-government/data-research-maps/open-data/open-data-licence/">Open
+                Government License - Toronto</a>.
+            </dd>
+
+            <dt>How often is the station data updated?</dt>
+            <dd>We update our data every 5 minutes, so any listed bike and dock availability numbers are at most 5
+                minutes old.
+            </dd>
+
+            <dt>What is the policy for photos uploaded to this site?</dt>
+            <dd>Photos posted on this site are uploaded by the owner and are licensed under public domain. By uploading
+                photos to this site you assert that you are the owner of the photo and are posting it with the knowledge
+                that it is going into public domain. Meaning, please only upload photos you've taken yourself, and know
+                that these photos will be open for anyone to use in any way without attribution, in perpetuity.
+            </dd>
+
+            <dt>Who can I get in contact with in case of issues or questions?</dt>
+            <dd>Please email us at bikesharepal (-at-) fastmail.com.</dd>
+        </dl>
+    </div>
+</div>
+{% endblock %}

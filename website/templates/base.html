@@ -25,6 +25,7 @@
                 <li><a href="{% url 'index' %}">Bike Share Pal</a></li>
                 <li class="{% if url_name == 'station_catalog_home' or url_name == 'station_details' %} menu-selected {% endif %}">
                     <a href="{% url 'station_catalog_home' %}">Station Catalog</a></li>
+                <li><a href="{% url 'about' %}">About</a></li>
             {% endwith %}
         </ul>
     </div>
