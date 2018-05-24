@@ -22,7 +22,8 @@
         <input type="checkbox" id="show-menu" role="button">
         <ul id="menu">
             {% with url_name=request.resolver_match.url_name %}
-                <li><a href="{% url 'index' %}">Bike Share Pal</a></li>
+                <li><a href="{% url 'index' %}"><img id="logo" src="{% static 'image/logo_md.png' %}"></a></li>
+                <li><a href="{% url 'index' %}">Home</a></li>
                 <li class="{% if url_name == 'station_catalog_home' or url_name == 'station_details' %} menu-selected {% endif %}">
                     <a href="{% url 'station_catalog_home' %}">Station Catalog</a></li>
                 <li><a href="{% url 'about' %}">About</a></li>

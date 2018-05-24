@@ -19,6 +19,11 @@ body {
     font-size: 18px;
 }
 
+#logo {
+    height: 100%;
+    padding-top: 1px;
+}
+
 /* menu stuff ===================================== */
 /*Strip the ul of padding and list styling*/
 ul {
