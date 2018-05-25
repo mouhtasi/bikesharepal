@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI for bikesharepal Django project
+
+[Service]
+EnvironmentFile=/home/maki/bikesharepal/bikesharepal/.env
+ExecStart=/home/nap/.virtualenvs/bikesharepal/bin/uwsgi --ini /home/maki/bikesharepal/uwsgi.ini
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target
