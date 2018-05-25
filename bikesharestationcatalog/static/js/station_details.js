@@ -11,6 +11,7 @@ window.onload = function () {
         });
 
         map['dragPan'].disable();
+        map['doubleClickZoom'].disable();
 
         map.on('load', function () {
             var nav = new mapboxgl.NavigationControl();
