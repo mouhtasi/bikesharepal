@@ -14,6 +14,7 @@
 
 .mapcontainer {
     touch-action: manipulation;
+    margin-bottom: 5px;
 }
 
 .row {
@@ -144,6 +145,7 @@ input[type="file"] {
 
 .chartTitle {
     text-align: center;
+
 }
 
 .chart-container {
