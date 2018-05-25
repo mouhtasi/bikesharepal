@@ -43,7 +43,7 @@ class Command(BaseCommand):
         for record in historical_log:
             if record['capacity'] == 0:
                 # sometimes a station has capacity of 0 for some reason. This is weird and breaks calculation so skip
-                self.stdout.write(self.style.WARNING('Capacity is 0 for station {}'.format(record['name'])))
+                # self.stdout.write(self.style.WARNING('Capacity is 0 for station {}'.format(record['name'])))
                 continue
 
             unix_timestamp = record['timestamp']
@@ -57,21 +57,25 @@ class Command(BaseCommand):
 
             # the data saved station names instead of IDs so some names have changed
             if not station_id:
-                self.stdout.write(self.style.WARNING('"{}" not found, trying flipped version'.format(record['name'])))
+                if record['name'] == 'Dundas St W / Edna Ave':  # recently removed
+                    # self.stdout.write(
+                        # self.style.WARNING('Passed Dundas St W / Edna Ave'))
+                    continue
+                # self.stdout.write(self.style.WARNING('"{}" not found, trying flipped version'.format(record['name'])))
                 flipped_name = ' / '.join(record['name'].split(' / ')[::-1])
                 station_id = station_name_to_id.get(flipped_name, None)
 
                 if not station_id:
-                    self.stdout.write(self.style.WARNING(
-                        '"{}", flipped version of "{}" was not found. Checking for hardcoded substitution'.format(
-                            flipped_name, record['name'])))
+                    # self.stdout.write(self.style.WARNING(
+                    #     '"{}", flipped version of "{}" was not found. Checking for hardcoded substitution'.format(
+                    #         flipped_name, record['name'])))
                     station_id = station_name_to_id.get(STATION_SUBSTITUTIONS.get(record['name'], ''), None)
-                    self.stdout.write(STATION_SUBSTITUTIONS.get(record['name'], ''))
+                    # self.stdout.write(STATION_SUBSTITUTIONS.get(record['name'], ''))
 
-                    if station_id:
-                        self.stdout.write(self.style.WARNING('Successfully substituted'))
-                    else:
-                        self.stdout.write(self.style.ERROR('"{}" was not found.'.format(record['name'])))
+                    # if station_id:
+                        # self.stdout.write(self.style.WARNING('Successfully substituted'))
+                    # else:
+                        # self.stdout.write(self.style.ERROR('"{}" was not found.'.format(record['name'])))
 
             station = stations_by_id[station_id]
             self.update_average_local(station, record['bikes_available'], record['capacity'], time, day)
@@ -95,12 +99,12 @@ class Command(BaseCommand):
         station_record[day]['time_data'][time]['mean'] = round(new_mean, 2)
         station_record[day]['time_data'][time]['count'] += 1
 
-        self.stdout.write(
-            'Day: {}, Time: {}, Count: {}, Mean: {}, Station: {}'.format(day, time,
-                                                                         station_record[day]['time_data'][time][
-                                                                             'count'],
-                                                                         station_record[day]['time_data'][time]['mean'],
-                                                                         station.name))
+        # self.stdout.write(
+        #     'Day: {}, Time: {}, Count: {}, Mean: {}, Station: {}'.format(day, time,
+        #                                                                  station_record[day]['time_data'][time][
+        #                                                                      'count'],
+        #                                                                  station_record[day]['time_data'][time]['mean'],
+        #                                                                  station.name))
 
     def save_to_db(self, stations_by_id):
         ctr = 0
