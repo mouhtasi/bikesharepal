@@ -16,12 +16,14 @@ window.onload = function () {
             var nav = new mapboxgl.NavigationControl();
             map.addControl(nav, 'top-right');
 
-            map.addControl(new mapboxgl.GeolocateControl({
+            var geo = new mapboxgl.GeolocateControl({
                 positionOptions: {
                     enableHighAccuracy: true
                 },
                 trackUserLocation: true
-            }));
+            });
+
+            map.addControl(geo);
 
             var geojson = window.geojson;
 
@@ -142,6 +144,10 @@ window.onload = function () {
             map.on('mouseleave', 'stations', function () {
                 map.getCanvas().style.cursor = '';
             });
+
+            setTimeout(function () {
+                geo.trigger();
+            }, 2000);
         });
 
         document.getElementById('station-list').style.display = 'none'; // the element is hidden if JS is enabled
