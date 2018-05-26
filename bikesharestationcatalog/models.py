@@ -3,6 +3,7 @@ from django.contrib.postgres.fields import JSONField
 import os
 import hashlib
 from django.conf import settings
+from django.urls import reverse
 
 
 class Station(models.Model):
@@ -18,6 +19,9 @@ class Station(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('station_details', args=[str(self.id)])
 
 
 def hash_image(instance, filename):

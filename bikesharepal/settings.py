@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
     'bikesharestationcatalog',
     'website'
 ]
@@ -132,3 +134,5 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = 30 * 1024 * 1024
+
+SITE_ID = 1
