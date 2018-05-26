@@ -1,7 +1,9 @@
 from django.contrib import admin
-from bikesharestationcatalog.models import StationImage
+from bikesharestationcatalog.models import StationImage, Station
 from django.utils.html import format_html
 
+
+admin.site.register(Station)
 
 @admin.register(StationImage)
 class StationImageAdmin(admin.ModelAdmin):
