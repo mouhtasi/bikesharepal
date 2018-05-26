@@ -5,3 +5,5 @@ bikesharepal/static/
 bikesharepal/.env
 bikesharepal/media/
 updatestationsdb.log
+load_env_secrets.sh
+uwsgi.log
