@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'website.context_processors.global_settings'
             ],
         },
     },
@@ -136,3 +137,5 @@ STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 FILE_UPLOAD_MAX_MEMORY_SIZE = 30 * 1024 * 1024
 
 SITE_ID = 1
+
+GOOGLE_ANALYTICS = os.getenv('GOOGLE_ANALYTICS')
