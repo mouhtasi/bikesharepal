@@ -1,3 +1,4 @@
 user-agent: *
 disallow: /admin/
 crawl-delay: 2
+sitemap: https://bikesharepal.com/sitemap.xml
