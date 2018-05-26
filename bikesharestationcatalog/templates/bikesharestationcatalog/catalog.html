@@ -7,7 +7,7 @@
 <script>
     (function () {
         window.geojson = {{ geojson|safe }};
-        window.station_detail_url = '{% url 'station_details' 0 %}';
+        window.station_detail_url = '{% url 'station_details' 9999 %}';
     }());
 </script>
 <script src="{% static 'js/catalog.js'%} "></script>

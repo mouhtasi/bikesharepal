@@ -95,7 +95,7 @@ window.onload = function () {
                 description += '<br>Available Bikes: ' + marker.properties.num_bikes_available;
                 description += '<br>Available Docks: ' + marker.properties.num_docks_available;
                 description += '<br><a class="pure-button pure-button-primary" href="' +
-                    (window.origin + window.station_detail_url).replace('0', marker.properties.id) + '">Station Details</a>';
+                    (window.location.origin + window.station_detail_url).replace('9999', marker.properties.id) + '">Station Details</a>';
 
                 var popup = new mapboxgl.Popup().setHTML(description);
 
@@ -127,7 +127,7 @@ window.onload = function () {
                 description += '<br>Available Bikes: ' + station_details.properties.num_bikes_available;
                 description += '<br>Available Docks: ' + station_details.properties.num_docks_available;
                 description += '<br><a class="pure-button pure-button-primary" href="' +
-                    (window.origin + window.station_detail_url).replace('0', station_details.properties.id) + '">Station Details</a>';
+                    (window.location.origin + window.station_detail_url).replace('9999', station_details.properties.id) + '">Station Details</a>';
 
                 new mapboxgl.Popup()
                     .setLngLat(coordinates)
