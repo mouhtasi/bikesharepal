@@ -87,7 +87,7 @@ window.onload = function () {
                     image = '25';
                 }
 
-                el.style.backgroundImage = "url(" + window.origin + "/static/image/marker" + image + ".svg)";
+                el.style.backgroundImage = "url(" + window.location.origin + "/static/image/marker" + image + ".svg)";
                 el.textContent = marker.properties.num_bikes_available;
 
 
