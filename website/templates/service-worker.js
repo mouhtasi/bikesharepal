@@ -22,6 +22,13 @@ const PRECACHE_URLS = [
     'static/js/station_details.js',
     'static/js/moment.min.js',
     'static/js/Chart.min.js',
+    '/static/image/marker0.svg',
+    '/static/image/marker1bike.svg',
+    '/static/image/marker1dock.svg',
+    '/static/image/marker25.svg',
+    '/static/image/marker50.svg',
+    '/static/image/marker75.svg',
+    '/static/image/marker100.svg',
     '/static/image/logo_md.png',
     'https://fonts.googleapis.com/css?family=Open+Sans:300',
     'https://use.fontawesome.com/releases/v5.0.13/css/all.css'
