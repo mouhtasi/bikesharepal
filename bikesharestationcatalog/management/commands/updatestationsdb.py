@@ -23,7 +23,10 @@ class Command(BaseCommand):
         if response.status_code != requests.codes.ok:
             raise CommandError('Failed to access API')
 
-        station_status = json.loads(response.content)['data']['stations']
+        stations_json = json.loads(response.content)
+
+        station_status = stations_json['data']['stations']
+        last_updated = datetime.fromtimestamp(stations_json['last_updated'], tz=pytz.timezone('America/Toronto'))
 
         station_status_merged = {}
         for station in station_information + station_status:
@@ -52,7 +55,8 @@ class Command(BaseCommand):
                                                                             'num_bikes_available'],
                                                                         'num_docks_available': station[
                                                                             'num_docks_available'],
-                                                                        'enabled': True})
+                                                                        'enabled': True,
+                                                                        'last_updated': last_updated})
                 if created:
                     num_created += 1
                 else:

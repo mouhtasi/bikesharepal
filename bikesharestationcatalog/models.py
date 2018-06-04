@@ -4,6 +4,7 @@ import os
 import hashlib
 from django.conf import settings
 from django.urls import reverse
+from django.utils import timezone
 
 
 class Station(models.Model):
@@ -16,6 +17,7 @@ class Station(models.Model):
     num_bikes_available = models.PositiveSmallIntegerField()
     num_docks_available = models.PositiveSmallIntegerField()
     enabled = models.BooleanField(default=True)
+    last_updated = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.name
