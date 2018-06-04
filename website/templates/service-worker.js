@@ -1,12 +1,4 @@
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js', {scope: '.'});
-}
-
-// Names of the two caches used in this version of the service worker.
-// Change to v2, etc. when you update any of the local resources, which will
-// in turn trigger the install event again.
-const PRECACHE = 'precache-v1';
-const RUNTIME = 'runtime';
+const CACHE = 'network-or-cache';
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
@@ -30,54 +22,56 @@ const PRECACHE_URLS = [
     '/static/image/marker75.svg',
     '/static/image/marker100.svg',
     '/static/image/logo_md.png',
-    'https://fonts.googleapis.com/css?family=Open+Sans:300',
-    'https://use.fontawesome.com/releases/v5.0.13/css/all.css'
+    // 'https://fonts.googleapis.com/css?family=Open+Sans:300',
+    // 'https://use.fontawesome.com/releases/v5.0.13/css/all.css'
 ];
 
-// The install handler takes care of precaching the resources we always need.
-self.addEventListener('install', event => {
-    event.waitUntil(
-        caches.open(PRECACHE)
-            .then(cache => cache.addAll(PRECACHE_URLS))
-            .then(self.skipWaiting())
-    );
+// On install, cache some resource.
+self.addEventListener('install', function (evt) {
+    // console.log('The service worker is being installed.');
+
+    // Ask the service worker to keep installing until the returning promise resolves.
+    evt.waitUntil(precache());
 });
 
-// The activate handler takes care of cleaning up old caches.
-self.addEventListener('activate', event => {
-    const currentCaches = [PRECACHE, RUNTIME];
-    event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return cacheNames.filter(cacheName => !currentCaches.includes(cacheName));
-        }).then(cachesToDelete => {
-            return Promise.all(cachesToDelete.map(cacheToDelete => {
-                return caches.delete(cacheToDelete);
-            }));
-        }).then(() => self.clients.claim())
-    );
+// Try network and if it fails, go for the cached copy.
+self.addEventListener('fetch', function (evt) {
+    // console.log('The service worker is serving the asset.');
+
+    evt.respondWith(fromNetwork(evt.request, 400).catch(function () {
+        return fromCache(evt.request);
+    }));
 });
 
-// The fetch handler serves responses for same-origin resources from a cache.
-// If no response is found, it populates the runtime cache with the response
-// from the network before returning it to the page.
-self.addEventListener('fetch', event => {
-    // Skip cross-origin requests, like those for Google Analytics.
-    if (event.request.url.startsWith(self.location.origin)) {
-        event.respondWith(
-            caches.match(event.request).then(cachedResponse => {
-                if (cachedResponse) {
-                    return cachedResponse;
-                }
+// Open a cache and use addAll() with an array of assets to add all of them to the cache.
+// Return a promise resolving when all the assets are added.
+function precache() {
+    return caches.open(CACHE).then(function (cache) {
+        return cache.addAll(PRECACHE_URLS);
+    });
+}
 
-                return caches.open(RUNTIME).then(cache => {
-                    return fetch(event.request).then(response => {
-                        // Put a copy of the response in the runtime cache.
-                        return cache.put(event.request, response.clone()).then(() => {
-                            return response;
-                        });
-                    });
-                });
-            })
-        );
-    }
-});
+// Time limited network request.
+// If the network fails or the response is not served before timeout, the promise is rejected.
+function fromNetwork(request, timeout) {
+    return new Promise(function (fulfill, reject) {
+        // Reject in case of timeout.
+        let timeoutId = setTimeout(reject, timeout);
+
+        // Fulfill in case of success.
+        fetch(request).then(function (response) {
+            clearTimeout(timeoutId);
+            fulfill(response);
+        }, reject); // Reject also if network fetch rejects.
+    });
+}
+
+// Open the cache where the assets were stored and search for the requested resource.
+// Notice that in case of no matching, the promise still resolves but it does with undefined as value.
+function fromCache(request) {
+    return caches.open(CACHE).then(function (cache) {
+        return cache.match(request).then(function (matching) {
+            return matching || Promise.reject('no-match');
+        });
+    });
+}

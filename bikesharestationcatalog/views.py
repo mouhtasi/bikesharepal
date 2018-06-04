@@ -48,7 +48,7 @@ def catalog_home(request):
     # we'll send the stations to build a table in case JS isn't enabled to show a map
     stations = Station.objects.filter(enabled=True).order_by('name')
     last_updated = stations.order_by('last_updated').first().last_updated.replace(tzinfo=timezone.utc).astimezone(
-        tz=pytz.timezone('America/Toronto')).strftime('%H:%M %p')
+        tz=pytz.timezone('America/Toronto')).strftime('%I:%M %p')
     geojson = serialize_geojson(stations)  # for the map
     return render(request, 'bikesharestationcatalog/catalog.html',
                   {'geojson': geojson, 'stations': stations, 'last_updated': last_updated})

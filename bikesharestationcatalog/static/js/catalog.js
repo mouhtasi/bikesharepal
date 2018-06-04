@@ -1,6 +1,10 @@
 mapboxgl.accessToken = 'pk.eyJ1IjoiaW1hZG0iLCJhIjoiY2plbnJsMDJyMjU0MTMzcGhxcjZlaXZlNyJ9.k2sPip120jugSJaLNs7Xbw';
 // TODO: Add mapbox access token to env (include in template and load in this js)
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js', {scope: '.'});
+}
+
 window.onload = function () {
     if (detectWebGL()) {
         document.getElementById('map').style.display = 'block';  // the element is hidden unless JS is enabled
