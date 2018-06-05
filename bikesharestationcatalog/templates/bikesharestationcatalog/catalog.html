@@ -4,6 +4,7 @@
 {% block extra_head %}<link rel="stylesheet" type="text/css" href="{% static 'css/catalog.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/mapbox-gl.css' %}" />
 <script src="{% static 'js/mapbox-gl.js' %}"></script>
+<script src="{% static 'js/moment.min.js' %}"></script>
 <script>
     (function () {
         window.geojson = {{ geojson|safe }};
@@ -20,9 +21,13 @@
 <div class="copy">
     <p>Use the map to select a bike share station to view current bike and dock availability.</p>
     <p>Click <em>Station Details</em> to view photos of the station, and average future bike availability. Data is updated every 5 minutes.</p>
-    <p>Last updated at {{ last_updated }}</p>
+    <p>Data last updated at <span id="last-updated">{{ last_updated }}</span>. Last checked at <span id="last-checked">{{ last_updated }}</span></p>
 </div>
+
 <div id="map"></div>
+
+<div id="reload-button"><i class="fas fa-sync"></i> Update</div>
+
 <table id="station-list">
 {# This table will be hidden if JS is enabled #}
     {% if stations %}

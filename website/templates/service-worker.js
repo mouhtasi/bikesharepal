@@ -22,6 +22,8 @@ const PRECACHE_URLS = [
     '/static/image/marker75.svg',
     '/static/image/marker100.svg',
     '/static/image/logo_md.png',
+    '/api/stations',
+    '/api/last_updated'
     // 'https://fonts.googleapis.com/css?family=Open+Sans:300',
     // 'https://use.fontawesome.com/releases/v5.0.13/css/all.css'
 ];

@@ -2,7 +2,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiaW1hZG0iLCJhIjoiY2plbnJsMDJyMjU0MTMzcGhxcjZla
 // TODO: Add mapbox access token to env (include in template and load in this js)
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js', {scope: '.'});
+    navigator.serviceWorker.register('service-worker.js', {scope: '.'});
 }
 
 window.onload = function () {
@@ -29,16 +29,30 @@ window.onload = function () {
 
             map.addControl(geo);
 
-            var geojson = window.geojson;
+            function update_data() {
+                map.getSource('stationsgeojson').setData(stations_url);
 
+                fetch(last_updated_url)
+                    .then(function (response) {
+                        return response.json();
+                    }).then(function (myJson) {
+                    document.getElementById('last-updated').innerHTML = myJson.last_updated;
+                    document.getElementById('last-checked').innerHTML = moment().format('hh:mm:ss A');
+                });
+            }
+
+            let stations_url = window.location.origin + '/api/stations';
+            let last_updated_url = window.location.origin + '/api/last_updated';
+            window.setInterval(function () {
+                update_data();
+            }, 1 * 60 * 1000);
+
+            map.addSource('stationsgeojson', {type: 'geojson', data: stations_url});
             map.addLayer(
                 {
                     "id": "stations",
                     "type": "symbol",
-                    'source': {
-                        'type': 'geojson',
-                        'data': geojson
-                    },
+                    'source': 'stationsgeojson',
                     "layout": {
                         "icon-image": "bicycle-share-15",
                         "icon-allow-overlap": true
@@ -51,19 +65,10 @@ window.onload = function () {
                 {
                     "id": "stations-markers",
                     "type": "symbol",
-                    'source': {
-                        'type': 'geojson',
-                        'data': geojson
-                    },
+                    'source': 'stationsgeojson',
                     "minzoom": 14
                 }
             );
-
-            // When a click event occurs on a feature in the places layer, open a popup at the
-            // location of the feature, with description HTML from its properties.
-            function makePopup(e) {
-
-            }
 
             geojson.features.forEach(function (marker) {
                 var el = document.createElement('div');
@@ -148,6 +153,10 @@ window.onload = function () {
             map.on('mouseleave', 'stations', function () {
                 map.getCanvas().style.cursor = '';
             });
+
+            document.getElementById('reload-button').onclick = function () {
+                update_data();
+            };
 
             setTimeout(function () {
                 geo.trigger();
