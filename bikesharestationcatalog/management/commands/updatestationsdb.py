@@ -62,7 +62,8 @@ class Command(BaseCommand):
                 else:
                     num_updated += 1
 
-                self.update_average(s, station['num_bikes_available'], station['capacity'], time, day)
+                if station['capacity'] != 0:  # there may be a station with a listed capacity of 0
+                    self.update_average(s, station['num_bikes_available'], station['capacity'], time, day)
             else:
                 num_ignored += 1
 
