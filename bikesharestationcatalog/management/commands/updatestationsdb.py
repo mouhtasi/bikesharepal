@@ -45,7 +45,9 @@ class Command(BaseCommand):
         num_created = 0
         num_ignored = 0
         for station in station_status_merged.values():
-            if station['last_reported']:  # there are stations that have no data but exist in one of the api outputs
+            # there are stations that have no data but exist in one of the api outputs
+            if station['last_reported'] and 'name' in station:
+                print(station['station_id'])
                 s, created = Station.objects.update_or_create(id=station['station_id'],
                                                               defaults={'name': station['name'],
                                                                         'longitude': station['lon'],
