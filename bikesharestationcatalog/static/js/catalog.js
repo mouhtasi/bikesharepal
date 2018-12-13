@@ -29,8 +29,79 @@ window.onload = function () {
 
             map.addControl(geo);
 
+            var current_markers = {};
+            var new_markers = [];
+
+            function generate_marker(station) {
+                var el = document.createElement('div');
+                el.className = 'station-marker';
+                el.style.display = 'none';
+
+                var bikes = station.properties.num_bikes_available;
+                var docks = station.properties.num_docks_available;
+
+                var image = '';
+                var bike_ratio = bikes / (bikes + docks);
+                if (bikes === 1 && docks > 0) {
+                    image = '1bike';
+                } else if (docks === 1 && bikes > 0) {
+                    image = '1dock';
+                } else if (bikes === 0 && docks > 0) {
+                    image = '0';
+                } else if (docks === 0 && bikes > 0) {
+                    image = '100';
+                } else if (bike_ratio < 1 && bike_ratio >= .625) {
+                    image = '75';
+                } else if (bike_ratio < .625 && bike_ratio > .375) {
+                    image = '50';
+                } else if (bike_ratio <= .375 && bike_ratio > 0) {
+                    image = '25';
+                }
+
+                el.style.backgroundImage = "url(" + window.location.origin + "/static/image/marker" + image + ".svg)";
+                el.textContent = station.properties.num_bikes_available;
+
+
+                var description = station.properties.name;
+                description += '<br>Available Bikes: ' + station.properties.num_bikes_available;
+                description += '<br>Available Docks: ' + station.properties.num_docks_available;
+                description += '<br><a class="pure-button pure-button-primary" href="' +
+                    (window.location.origin + window.station_detail_url).replace('9999', station.properties.id) + '">Station Details</a>';
+
+                var popup = new mapboxgl.Popup().setHTML(description);
+
+                return new mapboxgl.Marker(el)
+                    .setLngLat(station.geometry.coordinates)
+                    .setOffset([0, -25])
+                    .setPopup(popup)
+                    .addTo(map);
+            }
+
             function update_data() {
                 map.getSource('stationsgeojson').setData(stations_url);
+
+                fetch(stations_url)
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (myJson) {
+                        new_markers = [];
+                        myJson.features.forEach(function (station) {
+                            let updated = station.properties;
+                            let existing = current_markers[updated.id];
+                            if (updated.num_bikes_available !== existing[1] ||
+                                updated.num_docks_available !== existing[2]) {
+                                new_markers.push(station);
+                            }
+                        });
+                        console.log(new_markers);
+                        new_markers.forEach(function (station) {
+                            let m = generate_marker(station);
+                            current_markers[station.properties.id][0].remove();
+                            current_markers[station.properties.id] = [m, station.properties.num_bikes_available,
+                                station.properties.num_docks_available];
+                        });
+                    });
 
                 fetch(last_updated_url)
                     .then(function (response) {
@@ -61,58 +132,12 @@ window.onload = function () {
                 }
             );
 
-            map.addLayer(
-                {
-                    "id": "stations-markers",
-                    "type": "symbol",
-                    'source': 'stationsgeojson',
-                    "minzoom": 14
-                }
-            );
 
-            geojson.features.forEach(function (marker) {
-                var el = document.createElement('div');
-                el.className = 'station-marker';
-                el.style.display = 'none';
+            geojson.features.forEach(function (station) {
+                let m = generate_marker(station);
 
-                var bikes = marker.properties.num_bikes_available;
-                var docks = marker.properties.num_docks_available;
-
-                var image = '';
-                var bike_ratio = bikes / (bikes + docks);
-                if (bikes === 1 && docks > 0) {
-                    image = '1bike';
-                } else if (docks === 1 && bikes > 0) {
-                    image = '1dock';
-                } else if (bikes === 0 && docks > 0) {
-                    image = '0';
-                } else if (docks === 0 && bikes > 0) {
-                    image = '100';
-                } else if (bike_ratio < 1 && bike_ratio >= .625) {
-                    image = '75';
-                } else if (bike_ratio < .625 && bike_ratio > .375) {
-                    image = '50';
-                } else if (bike_ratio <= .375 && bike_ratio > 0) {
-                    image = '25';
-                }
-
-                el.style.backgroundImage = "url(" + window.location.origin + "/static/image/marker" + image + ".svg)";
-                el.textContent = marker.properties.num_bikes_available;
-
-
-                var description = marker.properties.name;
-                description += '<br>Available Bikes: ' + marker.properties.num_bikes_available;
-                description += '<br>Available Docks: ' + marker.properties.num_docks_available;
-                description += '<br><a class="pure-button pure-button-primary" href="' +
-                    (window.location.origin + window.station_detail_url).replace('9999', marker.properties.id) + '">Station Details</a>';
-
-                var popup = new mapboxgl.Popup().setHTML(description);
-
-                new mapboxgl.Marker(el)
-                    .setLngLat(marker.geometry.coordinates)
-                    .setOffset([0, -25])
-                    .setPopup(popup)
-                    .addTo(map);
+                current_markers[station.properties.id] = [m, station.properties.num_bikes_available,
+                                station.properties.num_docks_available];
             });
 
             map.on('zoom', function () {
