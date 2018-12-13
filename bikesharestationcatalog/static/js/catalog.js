@@ -94,7 +94,7 @@ window.onload = function () {
                                 new_markers.push(station);
                             }
                         });
-                        console.log(new_markers);
+
                         new_markers.forEach(function (station) {
                             let m = generate_marker(station);
                             current_markers[station.properties.id][0].remove();
@@ -119,6 +119,7 @@ window.onload = function () {
             }, 1 * 60 * 1000);
 
             map.addSource('stationsgeojson', {type: 'geojson', data: stations_url});
+            document.getElementById('last-checked').innerHTML = moment().format('hh:mm:ss A');
             map.addLayer(
                 {
                     "id": "stations",
