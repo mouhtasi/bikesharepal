@@ -4,6 +4,7 @@ import requests
 import json
 import pytz
 from datetime import datetime, timedelta
+from time import sleep
 
 
 # TODO: Add a check to only update if data is changed
@@ -13,17 +14,27 @@ class Command(BaseCommand):
     help = 'Updates the Station table using API data'
 
     def handle(self, *args, **options):
-        response = requests.get('https://tor.publicbikesystem.net/ube/gbfs/v1/en/station_information')
-        if response.status_code != requests.codes.ok:
-            raise CommandError('Failed to access API')
+        tries = 0
+        while tries < 5:
+            tries += 1
+            response = requests.get('https://tor.publicbikesystem.net/ube/gbfs/v1/en/station_information')
+            if response.status_code != requests.codes.ok:
+                sleep(1)
+                if tries == 5:
+                    raise CommandError('Failed to access station_information API after 5 tries')
+            elif response.status_code == requests.codes.ok:
+                station_information = json.loads(response.content)['data']['stations']
 
-        station_information = json.loads(response.content)['data']['stations']
-
-        response = requests.get('https://tor.publicbikesystem.net/ube/gbfs/v1/en/station_status')
-        if response.status_code != requests.codes.ok:
-            raise CommandError('Failed to access API')
-
-        stations_json = json.loads(response.content)
+        tries = 0
+        while tries < 5:
+            tries += 1
+            response = requests.get('https://tor.publicbikesystem.net/ube/gbfs/v1/en/station_status')
+            if response.status_code != requests.codes.ok:
+                sleep(1)
+                if tries == 5:
+                    raise CommandError('Failed to access station_status API after 5 tries')
+            elif response.status_code == requests.codes.ok:
+                stations_json = json.loads(response.content)
 
         station_status = stations_json['data']['stations']
         last_updated = datetime.fromtimestamp(stations_json['last_updated'], tz=pytz.timezone('America/Toronto'))
